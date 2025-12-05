@@ -1,3 +1,119 @@
-*.out
-*.bin
+# --- Build Directories ---
+# Ignore the standard build folder where CMake generates files
+build/
+bin/
+lib/
+out/
+cmake-build-*/
+
+# --- CMake Artifacts ---
+# Specific CMake files generated if not using a build folder
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+Makefile
+*.cmake
+!CMakeLists.txt
+!cmake/*.cmake
+
+# --- FetchContent Artifacts ---
+# Where SFML source code is downloaded if not inside build/
+_deps/
+
+# --- Compiled Binaries ---
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.pdb
+*.exp
+*.ilk
+
+# --- MacOS App Bundle ---
+*.app/
+
+# --- IDE & Editor Settings ---
+# VS Code
+.vscode/
+*.code-workspace
+
+# Visual Studio
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# CLion
+.idea/
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+
+# --- OS Generated Files ---
 .DS_Store
+Thumbs.db
+*.gypcmd
+*.mk
+*.ncb
+*.opensdf
+*.props
+*.pyc
+*.rules
+*.sdf
+*.sln
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.targets
+*.user
+*.vcproj
+*.vcxproj
+*.vcxproj.filters
+*.vpj
+*.vpw
+*.vpwhistu
+*.vtg
+*.xcodeproj
+*.xcworkspace
+*_proto.xml
+*_proto_cpp.xml
+*~
+!Android.mk
+.*.sw?
+.DS_Store
+.classpath
+.cproject
+.gdb_history
+.gdbinit
+.landmines
+.metadata
+.project
+.pydevproject
+.vscode
+# Settings directory for eclipse
+/.settings
+.checkstyle
+cscope.*
+Session.vim
+tags
+Thumbs.db
+# IDE's
+.vs/
+.kdev4/
+*.kdev4
+# CEF generated directories
+/binary_distrib
+/docs
+# CEF generated files
+.ccls-cache/
+/cef_api_untracked.json
+/tools/claude/build_analysis.txt
+/tools/claude/build_output.txt
+/tools/claude/patch_analysis.txt
+/tools/claude/patch_output.txt

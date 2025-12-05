@@ -14,29 +14,29 @@ struct Tab{
 };
 
 struct Pin : Tab{
-	std::string url;
 	bool loaded;
+	std::string url;
 };
 
 struct _S_Pin{
-	std::string url;
 	std::string title;
+	std::string url;
 };
 
 struct _S_Workspace{
-	_S_Pin pins[TAB_LIMIT];
 	size_t length;
+	_S_Pin pins[TAB_LIMIT];
 };
 
 struct State{
-	_S_Workspace workspaces[WS_LIMIT];
 	size_t length;
+	_S_Workspace workspaces[WS_LIMIT];
 };
 
 struct Workspace{
+	int activeTab = 0;
 	std::vector<Pin*> pinnedTabs;
 	std::vector<Tab*> tabs;
-	int activeTab = 0;
 };
 
 struct Styles{
@@ -78,7 +78,7 @@ class Browser{
 
 			styles = {
 				.sidebarWidth = 300,
-				.font = sf::Font("regular.ttf")
+				.font = sf::Font("assets/fonts/regular.ttf")
 			};
 
 			workspaces = {};
@@ -101,7 +101,7 @@ class Browser{
 		void start(){
 			while(window.isOpen()){
 				const std::optional event = window.pollEvent();
-				eventHandler(event);
+				if(event) eventHandler(event);
 
 				window.setView(sf::View(viewPort));
 				window.clear();
@@ -112,7 +112,8 @@ class Browser{
 		}
 };
 
-State defaultState = {
+int main(int argv, char* argc[]){
+	State defaultState = {
 	.length = 3,
 	.workspaces = {
 		{
@@ -140,7 +141,6 @@ State defaultState = {
 	}
 };
 
-int main(int argv, char* argc[]){
 	Browser browser;
 
 	std::ifstream saveState("ws.bin", std::ios::binary);
