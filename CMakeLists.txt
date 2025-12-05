@@ -27,7 +27,7 @@ elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "browser"
         MACOSX_BUNDLE_GUI_IDENTIFIER "cc.madum.browser"
-        MACOSX_BUNDLE_INFO_STRING "A minimalistic C++ browser with workspaces "
+        MACOSX_BUNDLE_INFO_STRING "A minimalistic C++ browser with workspaces"
     )
 else()
     add_executable(${PROJECT_NAME} ${SOURCES})
