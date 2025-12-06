@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
-
 project(browser VERSION 1.0.0 LANGUAGES CXX)
 
+# CMake settings
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -14,6 +14,12 @@ set(YLT_BUILD_TEST OFF)
 set(YLT_BUILD_EXAMPLE OFF)
 set(YLT_BUILD_BENCHMARK OFF)
 
+# Output config
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/browser")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+
+# Packages
 include(FetchContent)
 
 FetchContent_Declare(
@@ -30,23 +36,28 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(yalantinglibs)
 
-find_package(Threads REQUIRED)
+# Setting source files
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
+if(NOT SOURCES)
+    message(FATAL_ERROR "No source files found in 'src' directory!")
+endif()
 
-set(SOURCES main.cpp)
-
+# Making executables
 if(WIN32)
-	add_executable(${PROJECT_NAME} WIN32 ${SOURCES})
+	add_executable(${PROJECT_NAME} WIN32 ${SOURCES} ${HEADERS})
 elseif(APPLE)
-	add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES})
-
+	add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES} ${HEADERS})
 	set_target_properties(${PROJECT_NAME} PROPERTIES
 		MACOSX_BUNDLE_BUNDLE_NAME "browser"
 		MACOSX_BUNDLE_GUI_IDENTIFIER "cc.madum.browser"
 		MACOSX_BUNDLE_INFO_STRING "A minimalistic C++ browser with workspaces"
 	)
 else()
-	add_executable(${PROJECT_NAME} ${SOURCES})
+	add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 endif()
+
+find_package(Threads REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
 	SFML::Graphics
@@ -57,6 +68,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Threads::Threads
 )
 
+# Copying assets directory
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
 	"${CMAKE_CURRENT_SOURCE_DIR}/assets"
