@@ -1,10 +1,11 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <ylt/struct_pack.hpp>
 
 #include <iostream>
 #include <fstream>
-#include <ranges>
+#include <filesystem>
 
 #define WS_LIMIT 10
 #define TAB_LIMIT 256
@@ -69,7 +70,7 @@ class Browser{
 			cover.setPosition({ static_cast<float>(styles.sidebarWidth), 0 });
 			window.draw(cover);
 		}
-	
+
 	public:
 		Browser(){
 			window = sf::RenderWindow(sf::VideoMode({800, 600}), "browser");
@@ -86,15 +87,33 @@ class Browser{
 
 		void setState(State state){
 			for(int i = 0; i < state.length; i++){
-				std::cout << state.workspaces[i].length << std::endl;
+				Workspace* ws = new Workspace;
+				workspaces.push_back(ws);
+				workspaces[i]->activeTab = 0;
+				workspaces[i]->tabs = {};
+				workspaces[i]->pinnedTabs = {};
+
 				for(int j = 0; j < state.workspaces[i].length; j++){
-					std::cout << state.workspaces[i].pins[j].title << ", " << state.workspaces[i].pins[j].url << std::endl;
+					Pin* pin = new Pin;
+					workspaces[i]->pinnedTabs.push_back(pin);
+					workspaces[i]->pinnedTabs[j]->loaded = false;
+					workspaces[i]->pinnedTabs[j]->title = state.workspaces[i].pins[j].title;
+					workspaces[i]->pinnedTabs[j]->url = state.workspaces[i].pins[j].url;
 				}
 			}
 		}
-		
+
 		State getState(){
-			State state;
+			State state = { .length = workspaces.size() };
+
+			for(int i = 0; i < state.length; i++){
+				state.workspaces[i] = { .length = workspaces[i]->pinnedTabs.size() };
+				for(int j = 0; j < state.workspaces[i].length; j++) state.workspaces[i].pins[j] = {
+					.title = workspaces[i]->pinnedTabs[j]->title,
+					.url = workspaces[i]->pinnedTabs[j]->url
+				};
+			}
+
 			return state;
 		}
 
@@ -112,8 +131,7 @@ class Browser{
 		}
 };
 
-int main(int argv, char* argc[]){
-	State defaultState = {
+State defaultState = {
 	.length = 3,
 	.workspaces = {
 		{
@@ -141,22 +159,21 @@ int main(int argv, char* argc[]){
 	}
 };
 
+int main(int argv, char* argc[]){
 	Browser browser;
 
-	std::ifstream saveState("ws.bin", std::ios::binary);
-	if(saveState.is_open()){
-		std::cout << "file's there" << std::endl;
+	std::ifstream in("ws.bin", std::ios::binary);
+	if(in.is_open()){
 		State state;
-		saveState.read(reinterpret_cast<char*>(&state), sizeof(state));
-		saveState.close();
-		std::cout << state.workspaces[0].pins[0].url << std::endl;
-		browser.setState(state);
+		struct_pack::err_code err = struct_pack::deserialize_to(state, in);
+		in.close();
+		if(!err) browser.setState(state);
 	}
-	
+
 	browser.start();
 
 	State state = browser.getState();
 	std::ofstream out("ws.bin", std::ios::binary);
-	out.write(reinterpret_cast<char*>(&state), sizeof(state));
+	struct_pack::serialize_to(out, state);
 	out.close();
 }

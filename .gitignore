@@ -16,6 +16,7 @@ Makefile
 *.cmake
 !CMakeLists.txt
 !cmake/*.cmake
+.cache
 
 # --- FetchContent Artifacts ---
 # Where SFML source code is downloaded if not inside build/
