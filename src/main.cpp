@@ -4,6 +4,23 @@
 
 #include "browser.h"
 
+#ifdef __APPLE__
+    #include <mach-o/dyld.h>
+    #include <limits.h>
+    #include <unistd.h>
+#endif
+
+void setWorkingDirectory() {
+#ifdef __APPLE__
+    char path[PATH_MAX];
+    uint32_t size = sizeof(path);
+    if (_NSGetExecutablePath(path, &size) == 0) {
+        std::filesystem::path exePath = path;
+        std::filesystem::current_path(exePath.parent_path());
+    }
+#endif
+}
+
 State defaultState = {
 	{
 		{ .title = "DAR Canvas", .url = "https://davidsongifted.instructure.com" },
@@ -21,6 +38,8 @@ State defaultState = {
 };
 
 int main(int argv, char* argc[]){
+	setWorkingDirectory();
+
 	Browser browser;
 
 	std::ifstream in("ws.bin", std::ios::binary);

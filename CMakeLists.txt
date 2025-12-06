@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 project(browser VERSION 1.0.0 LANGUAGES CXX)
 
 # CMake settings
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -35,6 +35,15 @@ FetchContent_Declare(
 	GIT_TAG        0.5.6
 )
 FetchContent_MakeAvailable(yalantinglibs)
+
+# SFML3 has a known issue on macOS where <iostream> is missing in some files.
+if(APPLE)
+    foreach(target sfml-system sfml-window sfml-graphics sfml-audio sfml-network)
+        if(TARGET ${target})
+            target_compile_options(${target} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-include> $<$<COMPILE_LANGUAGE:CXX>:iostream>)
+        endif()
+    endforeach()
+endif()
 
 # Setting source files
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")

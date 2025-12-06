@@ -1,13 +1,9 @@
-# --- Build Directories ---
-# Ignore the standard build folder where CMake generates files
 build/
 bin/
 lib/
 out/
 cmake-build-*/
 
-# --- CMake Artifacts ---
-# Specific CMake files generated if not using a build folder
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
@@ -18,11 +14,9 @@ Makefile
 !cmake/*.cmake
 .cache
 
-# --- FetchContent Artifacts ---
-# Where SFML source code is downloaded if not inside build/
 _deps/
 
-# --- Compiled Binaries ---
+
 *.exe
 *.dll
 *.so
@@ -33,7 +27,7 @@ _deps/
 *.exp
 *.ilk
 
-# --- MacOS App Bundle ---
+
 *.app/
 
 # --- IDE & Editor Settings ---

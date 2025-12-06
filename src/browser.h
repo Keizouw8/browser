@@ -18,6 +18,9 @@ struct Workspace{
 	int activeTab = -1;
 	std::vector<Pin*> pins;
 	std::vector<Tab*> tabs;
+	size_t size(){
+		return pins.size() + tabs.size();
+	}
 };
 
 struct _S_Pin{
@@ -36,6 +39,7 @@ class Browser{
 		int activeWorkspace;
 		void eventHandler(std::optional<sf::Event> event);
 		void drawTabs();
+		void drawWorkspaces();
 
 	public:
 		Browser();
