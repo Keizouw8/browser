@@ -3,7 +3,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-#include "styles.h"
+#include "appearance/styles.h"
+#include "events/keybinds.h"
+
+#ifndef BROWSER
+#define BROWSER
 
 struct Tab{
 	std::string title;
@@ -36,6 +40,7 @@ class Browser{
 		sf::FloatRect viewPort;
 		std::vector<Workspace*> workspaces;
 		Styles styles;
+		KeyBinds keyBinds;
 		int activeWorkspace;
 		void eventHandler(std::optional<sf::Event> event);
 		void drawTabs();
@@ -45,5 +50,9 @@ class Browser{
 		Browser();
 		void setState(State state);
 		State getState();
+		void setStyles(_S_Styles in);
+		void setKeybinds(_S_KeyBinds in);
 		void start();
 };
+
+#endif

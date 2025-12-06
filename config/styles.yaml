@@ -1,0 +1,10 @@
+sidebarWidth: 300
+colors:
+    primary: "FFFFFF"
+    secondary: "000000"
+    tertiary: "969696"
+fonts:
+    regular: "assets/fonts/regular.ttf"
+    bold: "assets/fonts/bold.ttf"
+    italic: "assets/fonts/italic.ttf"
+    bold_italic: "assets/fonts/bold_italic.ttf"

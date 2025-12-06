@@ -77,10 +77,16 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Threads::Threads
 )
 
-# Copying assets directory
+# Copying assets and config directory
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
 	"${CMAKE_CURRENT_SOURCE_DIR}/assets"
 	"$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets"
 	COMMENT "Copying assets to build directory..."
+)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	"${CMAKE_CURRENT_SOURCE_DIR}/config"
+	"$<TARGET_FILE_DIR:${PROJECT_NAME}>/config"
+	COMMENT "Copying config to build directory..."
 )
