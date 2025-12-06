@@ -1,3 +1,4 @@
+#include "SFML/Graphics/Color.hpp"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -35,14 +36,28 @@ struct State{
 };
 
 struct Workspace{
-	int activeTab = 0;
-	std::vector<Pin*> pinnedTabs;
+	int activeTab;
+	std::vector<Pin*> pins;
 	std::vector<Tab*> tabs;
+};
+
+struct Fonts{
+	sf::Font regular;
+	sf::Font bold;
+	sf::Font italic;
+	sf::Font bold_italic;
+};
+
+struct Colors{
+	sf::Color primary;
+	sf::Color secondary;
+	sf::Color tertiary;
 };
 
 struct Styles{
 	int sidebarWidth;
-	sf::Font font;
+	Fonts fonts;
+	Colors colors;
 };
 
 class Browser{
@@ -51,7 +66,7 @@ class Browser{
 		sf::FloatRect viewPort;
 		std::vector<Workspace*> workspaces;
 		Styles styles;
-		int activeTab;
+		int activeWorkspace;
 
 		void eventHandler(std::optional<sf::Event> event){
 			if(event->is<sf::Event::Closed>()) window.close();
@@ -59,11 +74,21 @@ class Browser{
 		}
 
 		void drawTabs(){
-			// for (int i = 0; i < tabs.size(); i++){
-			// 	sf::Text text(styles.font, std::format("{} {}", i + 1, tabs[i].title), 14);
-			// 	text.setPosition({ 10, 5 + 20.f * i });
-			// 	window.draw(text);
-			// }
+			int i = 0;
+
+			for (; i < workspaces[activeWorkspace]->pins.size(); i++){
+				sf::Text text(workspaces[activeWorkspace]->activeTab == i ? styles.fonts.bold_italic : styles.fonts.bold, std::format("{} {}", i + 1, workspaces[activeWorkspace]->pins[i]->title), 14);
+				text.setFillColor(workspaces[activeWorkspace]->pins[i]->loaded ? styles.colors.primary : styles.colors.tertiary);
+				text.setPosition({ 10, 5 + 20.f * i });
+				window.draw(text);
+			}
+
+			for (int j = 0; j < workspaces[activeWorkspace]->tabs.size(); j++, i++){
+				sf::Text text(workspaces[activeWorkspace]->activeTab == i ? styles.fonts.italic : styles.fonts.regular, std::format("{} {}", i + 1, workspaces[activeWorkspace]->tabs[j]->title), 14);
+				text.setFillColor(styles.colors.primary);
+				text.setPosition({ 10, 5 + 20.f * i });
+				window.draw(text);
+			}
 
 			sf::RectangleShape cover({ viewPort.size.x - styles.sidebarWidth, viewPort.size.y });
 			cover.setFillColor(sf::Color::Red);
@@ -75,11 +100,21 @@ class Browser{
 		Browser(){
 			window = sf::RenderWindow(sf::VideoMode({800, 600}), "browser");
 			viewPort = sf::FloatRect({0, 0}, {800, 600});
-			activeTab = 0;
+			activeWorkspace = 0;
 
 			styles = {
 				.sidebarWidth = 300,
-				.font = sf::Font("assets/fonts/regular.ttf")
+				.fonts = {
+					.regular = sf::Font("assets/fonts/regular.ttf"),
+					.bold = sf::Font("assets/fonts/bold.ttf"),
+					.italic = sf::Font("assets/fonts/italic.ttf"),
+					.bold_italic = sf::Font("assets/fonts/bold_italic.ttf")
+				},
+				.colors = {
+					.primary = sf::Color::White,
+					.secondary = sf::Color::Black,
+					.tertiary = sf::Color(150, 150, 150)
+				}
 			};
 
 			workspaces = {};
@@ -89,16 +124,13 @@ class Browser{
 			for(int i = 0; i < state.length; i++){
 				Workspace* ws = new Workspace;
 				workspaces.push_back(ws);
-				workspaces[i]->activeTab = 0;
-				workspaces[i]->tabs = {};
-				workspaces[i]->pinnedTabs = {};
+				ws->activeTab = -1;
 
 				for(int j = 0; j < state.workspaces[i].length; j++){
 					Pin* pin = new Pin;
-					workspaces[i]->pinnedTabs.push_back(pin);
-					workspaces[i]->pinnedTabs[j]->loaded = false;
-					workspaces[i]->pinnedTabs[j]->title = state.workspaces[i].pins[j].title;
-					workspaces[i]->pinnedTabs[j]->url = state.workspaces[i].pins[j].url;
+					workspaces[i]->pins.push_back(pin);
+					workspaces[i]->pins[j]->title = state.workspaces[i].pins[j].title;
+					workspaces[i]->pins[j]->url = state.workspaces[i].pins[j].url;
 				}
 			}
 		}
@@ -107,10 +139,10 @@ class Browser{
 			State state = { .length = workspaces.size() };
 
 			for(int i = 0; i < state.length; i++){
-				state.workspaces[i] = { .length = workspaces[i]->pinnedTabs.size() };
+				state.workspaces[i] = { .length = workspaces[i]->pins.size() };
 				for(int j = 0; j < state.workspaces[i].length; j++) state.workspaces[i].pins[j] = {
-					.title = workspaces[i]->pinnedTabs[j]->title,
-					.url = workspaces[i]->pinnedTabs[j]->url
+					.title = workspaces[i]->pins[j]->title,
+					.url = workspaces[i]->pins[j]->url
 				};
 			}
 
@@ -118,6 +150,11 @@ class Browser{
 		}
 
 		void start(){
+			if(!workspaces.size()){
+				Workspace* ws = new Workspace;
+				workspaces.push_back(ws);
+				ws->activeTab = -1;
+			}
 			while(window.isOpen()){
 				const std::optional event = window.pollEvent();
 				if(event) eventHandler(event);
