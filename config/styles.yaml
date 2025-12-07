@@ -1,8 +1,8 @@
 sidebarWidth: 300
 colors:
-    primary: "FFFFFF"
-    secondary: "000000"
-    tertiary: "969696"
+    primary: "#FFFFFF"
+    secondary: "#000000"
+    tertiary: "#969696"
 fonts:
     regular: "assets/fonts/regular.ttf"
     bold: "assets/fonts/bold.ttf"

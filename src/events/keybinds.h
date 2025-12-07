@@ -2,21 +2,23 @@
 #include <unordered_map>
 #include <ylt/struct_yaml/yaml_reader.h>
 #include <ylt/struct_yaml/yaml_writer.h>
+#include <format>
 
 #ifndef Keybinds
 #define Keybinds
 
-enum BindPoints{
+enum BindPoint{
 	NEXTTAB, PREVTAB, TAB1, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7, TAB8, LASTTAB,
 	NEXTWS, PREVWS, WS1, WS2, WS3, WS4, WS5, WS6, WS7, WS8, WS9, LASTWS,
-	REFRESH, NEWTAB, CLOSETAB
+	REFRESH, NEWTAB, CLOSETAB,
+	TOGGLECOMPACT, SETTINGS
 };
 
 struct KeyBind{
-	bool meta;
-	bool control;
-	bool alt;
-	bool shift;
+	bool meta = false;
+	bool control = false;
+	bool alt = false;
+	bool shift = false;
 	std::string description = "===UNDEFINED===";
 	bool operator==(const KeyBind& other) const{
         return meta == other.meta &&
@@ -24,6 +26,9 @@ struct KeyBind{
                alt == other.alt &&
                shift == other.shift &&
                description == other.description;
+    }
+    std::string to_string()const{
+    	return std::format("Key {}:\n\tMeta: {}\n\tControl: {}\n\tAlt: {}\n\tShift: {}", description, meta, control, alt, shift);
     }
 };
 
@@ -81,7 +86,7 @@ struct _S_KeyBinds{
 	TabManagementBinds tabManagement;
 };
 
-using KeyBinds = std::unordered_map<KeyBind, BindPoints, KeyBindHash>;
+using KeyBinds = std::unordered_map<KeyBind, BindPoint, KeyBindHash>;
 
 _S_KeyBinds defaultKeybinds();
 

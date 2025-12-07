@@ -1,13 +1,14 @@
 #include "keybinds.h"
 #include <format>
+#include <iostream>
 
-#define SHIFT(e) std::format("shift,{}", e)
+#define SHIFT(e) std::format("shift {}", e)
 #ifdef __APPLE__
-	#define MOD1(e) std::format("meta,{}", e)
-	#define MOD2(e) std::format("control,{}", e)
+	#define MOD1(e) std::format("meta {}", e)
+	#define MOD2(e) std::format("control {}", e)
 #else
-	#define MOD1(e) std::format("control,{}", e)
-	#define MOD2(e) std::format("alt,{}", e)
+	#define MOD1(e) std::format("control {}", e)
+	#define MOD2(e) std::format("alt {}", e)
 #endif
 
 _S_KeyBinds defaultKeybinds(){

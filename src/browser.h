@@ -39,12 +39,14 @@ class Browser{
 		sf::RenderWindow window;
 		sf::FloatRect viewPort;
 		std::vector<Workspace*> workspaces;
+		bool compactMode = false;
 		Styles styles;
 		KeyBinds keyBinds;
 		int activeWorkspace;
 		void eventHandler(std::optional<sf::Event> event);
 		void drawTabs();
 		void drawWorkspaces();
+		void performCommand(BindPoint bindPoint);
 
 	public:
 		Browser();
@@ -53,6 +55,19 @@ class Browser{
 		void setStyles(_S_Styles in);
 		void setKeybinds(_S_KeyBinds in);
 		void start();
+		void nextTab();
+		void prevTab();
+		void selectTab(int i);
+		void lastTab();
+		void nextWorkspace();
+		void prevWorkspace();
+		void selectWorkspace(int i);
+		void lastWorkspace();
+		void refresh();
+		void newTab();
+		void closeTab();
+		void toggleCompact();
+		void openSettings();
 };
 
 #endif
