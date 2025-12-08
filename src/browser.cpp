@@ -14,6 +14,10 @@ void Browser::start(){
 		workspaces.push_back(ws);
 		ws->activeTab = -1;
 	}
+
+	input.reveal();
+	input.setPlaceholder("Placeholder");
+
 	while(window.isOpen()){
 		const std::optional event = window.pollEvent();
 		if(event) eventHandler(event);
@@ -28,6 +32,7 @@ void Browser::start(){
 
 		drawTabs();
 		drawWorkspaces();
+		input.draw(window, styles);
 
 		window.display();
 	}

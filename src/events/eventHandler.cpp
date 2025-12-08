@@ -2,7 +2,6 @@
 #include "SFML/Window/Keyboard.hpp"
 #include "keybinds.h"
 #include <iostream>
-// #include <vector>
 
 void Browser::eventHandler(std::optional<sf::Event> event){
 	if(event->is<sf::Event::Closed>()) window.close();

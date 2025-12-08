@@ -4,6 +4,7 @@
 #include <SFML/Audio.hpp>
 
 #include "appearance/styles.h"
+#include "components/floatingInput.h"
 #include "events/keybinds.h"
 
 #ifndef BROWSER
@@ -14,7 +15,8 @@ struct Tab{
 };
 
 struct Pin : Tab{
-	bool loaded;
+	bool setTitle = false;
+	bool loaded = false;
 	std::string url;
 };
 
@@ -43,6 +45,7 @@ class Browser{
 		Styles styles;
 		KeyBinds keyBinds;
 		int activeWorkspace;
+		FloatingInput input;
 		void eventHandler(std::optional<sf::Event> event);
 		void drawTabs();
 		void drawWorkspaces();
