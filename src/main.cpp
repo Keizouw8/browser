@@ -18,8 +18,8 @@ void setWorkingDirectory() {
     char path[PATH_MAX];
     uint32_t size = sizeof(path);
     if (_NSGetExecutablePath(path, &size) == 0) {
-        std::filesystem::path exePath = path;
-        std::filesystem::current_path(exePath.parent_path());
+        std::filesystem::path executable = path;
+        std::filesystem::current_path(executable.parent_path());
     }
 #endif
 }

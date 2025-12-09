@@ -1,11 +1,13 @@
 #include "browser.h"
 #include <vector>
+#include <iostream>
 
 Browser::Browser(){
 	window = sf::RenderWindow(sf::VideoMode({800, 600}), "browser");
 	viewPort = sf::FloatRect({0, 0}, {800, 600});
 	activeWorkspace = 0;
 	workspaces = {};
+	compactMode = false;
 }
 
 void Browser::start(){
@@ -30,8 +32,11 @@ void Browser::start(){
 		background.setFillColor(styles.colors.secondary);
 		window.draw(background);
 
-		drawTabs();
-		drawWorkspaces();
+		if(!compactMode){
+			std::cout << "It's compact" << std::endl;
+			drawTabs();
+			drawWorkspaces();
+		}
 		input.draw(window, styles);
 
 		window.display();

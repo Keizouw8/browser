@@ -8,3 +8,7 @@ fonts:
     bold: "assets/fonts/bold.ttf"
     italic: "assets/fonts/italic.ttf"
     bold_italic: "assets/fonts/bold_italic.ttf"
+ui:
+    fontSize: 14
+    inputSize: 20
+    padding: 10

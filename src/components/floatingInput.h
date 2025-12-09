@@ -21,6 +21,8 @@ class FloatingInput{
 		void draw(sf::RenderWindow& window, Styles& styles);
 		void reveal();
 		void cancel();
+		bool active();
+		void handleEvent(sf::Event event);
 };
 
 #endif

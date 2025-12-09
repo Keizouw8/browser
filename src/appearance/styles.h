@@ -16,10 +16,17 @@ struct Colors{
 	sf::Color tertiary;
 };
 
+struct UI{
+	int fontSize;
+	int inputSize;
+	int padding;
+};
+
 struct Styles{
 	int sidebarWidth;
 	Fonts fonts;
 	Colors colors;
+	UI ui;
 };
 
 struct _S_Fonts{
@@ -39,6 +46,7 @@ struct _S_Styles{
 	int sidebarWidth;
 	_S_Fonts fonts;
 	_S_Colors colors;
+	UI ui;
 };
 
 #endif

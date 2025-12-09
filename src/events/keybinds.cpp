@@ -45,7 +45,7 @@ _S_KeyBinds defaultKeybinds(){
 
 	return {
 		.toggleCompact = MOD1(SHIFT("s")),
-		.settings = MOD1(","),
+		.settings = MOD1(SHIFT(",")),
 		.tabs = tabBinds,
 		.workspaces = workspaceBinds,
 		.tabManagement = tabManagementBinds

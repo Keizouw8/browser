@@ -39,4 +39,5 @@ void Browser::setStyles(_S_Styles in){
 		.secondary = hexToColor(in.colors.secondary),
 		.tertiary = hexToColor(in.colors.tertiary)
 	};
+	styles.ui = in.ui;
 }
